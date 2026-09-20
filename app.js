@@ -60,6 +60,26 @@ function switchAuthTab(tab) {
     }
 }
 
+function showToast(msg, type = 'success') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    
+    let iconClass = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
+    toast.innerHTML = `<i class="fa-solid ${iconClass} toast-icon"></i> <span>${msg}</span>`;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('toast-hiding');
+        toast.addEventListener('animationend', () => {
+            toast.remove();
+        });
+    }, 3000);
+}
+
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) modal.classList.add('active');
@@ -143,7 +163,7 @@ function handleLogin() {
     const password = passInput.value;
 
     if (!email || !password) {
-        alert('กรุณากรอกอีเมลและรหัสผ่านให้ครบถ้วน');
+        showToast('กรุณากรอกอีเมลและรหัสผ่านให้ครบถ้วน', 'error');
         return;
     }
 
@@ -151,7 +171,7 @@ function handleLogin() {
     const user = users.find(u => u.email === email);
 
     if (!user || user.password !== password) {
-        alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+        showToast('อีเมลหรือรหัสผ่านไม่ถูกต้อง', 'error');
         return;
     }
 
@@ -159,6 +179,7 @@ function handleLogin() {
     emailInput.value = '';
     passInput.value = '';
 
+    showToast('เข้าสู่ระบบสำเร็จ');
     loadUserData(user);
     navigateTo('screen-home');
 }
@@ -169,13 +190,13 @@ function handleRegister() {
     const password = document.getElementById('reg-password').value;
 
     if (!name || !email || !password) {
-        alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+        showToast('กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
         return;
     }
 
     const users = JSON.parse(localStorage.getItem('smart_finance_users')) || [];
     if (users.find(u => u.email === email)) {
-        alert('อีเมลนี้ถูกใช้งานแล้ว กรุณาเข้าสู่ระบบ');
+        showToast('อีเมลนี้ถูกใช้งานแล้ว กรุณาเข้าสู่ระบบ', 'error');
         return;
     }
 
@@ -196,7 +217,7 @@ function handleRegister() {
     users.push(newUser);
     localStorage.setItem('smart_finance_users', JSON.stringify(users));
     localStorage.setItem('smart_finance_currentUser', JSON.stringify(newUser));
-    alert('สมัครสมาชิกสำเร็จ!');
+    showToast('สมัครสมาชิกสำเร็จ!');
     
     document.getElementById('reg-name').value = '';
     document.getElementById('reg-email').value = '';
@@ -210,6 +231,7 @@ function handleLogout() {
     localStorage.removeItem('smart_finance_currentUser');
     closeModal('modal-profile');
     navigateTo('screen-auth');
+    showToast('ออกจากระบบสำเร็จ');
 }
 
 function formatMoney(amount) {
@@ -364,6 +386,7 @@ function saveBudgetSettings() {
     updateUsersArray(currentUser);
     closeModal('modal-budget');
     loadUserData(currentUser);
+    showToast('อัปเดตเป้าหมายงบประมาณสำเร็จ');
 }
 
 function updateUsersArray(user) {
@@ -377,7 +400,10 @@ function updateUsersArray(user) {
 
 function saveProfile() {
     const newName = document.getElementById('settings-name').value.trim();
-    if (!newName) return alert('กรุณาระบุชื่อแสดงผล');
+    if (!newName) {
+        showToast('กรุณาระบุชื่อแสดงผล', 'error');
+        return;
+    }
 
     const currentUser = JSON.parse(localStorage.getItem('smart_finance_currentUser'));
     if (currentUser) {
@@ -386,7 +412,7 @@ function saveProfile() {
         localStorage.setItem('smart_finance_currentUser', JSON.stringify(currentUser));
     }
     updateUserName(newName);
-    alert('บันทึกการเปลี่ยนแปลงสำเร็จ');
+    showToast('บันทึกการเปลี่ยนแปลงสำเร็จ');
     closeModal('modal-profile');
 }
 
@@ -442,8 +468,14 @@ function saveNewTransaction() {
     const name = nameInput.value.trim();
     const amount = parseFloat(amountInput.value);
 
-    if (!name) return alert('กรุณาระบุชื่อรายการ');
-    if (isNaN(amount) || amount <= 0) return alert('กรุณาระบุจำนวนเงินที่มากกว่า 0');
+    if (!name) {
+        showToast('กรุณาระบุชื่อรายการ', 'error');
+        return;
+    }
+    if (isNaN(amount) || amount <= 0) {
+        showToast('กรุณาระบุจำนวนเงินที่มากกว่า 0', 'error');
+        return;
+    }
 
     const currentUser = JSON.parse(localStorage.getItem('smart_finance_currentUser'));
     if (!currentUser) return;
@@ -462,17 +494,32 @@ function saveNewTransaction() {
     nameInput.value = ''; amountInput.value = '0.00';
     closeModal('modal-add');
     loadUserData(currentUser);
+    showToast('บันทึกรายการสำเร็จ');
 }
 
-function deleteTransaction(id) {
-    if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?')) return;
+let transactionToDelete = null;
 
+function deleteTransaction(id) {
+    transactionToDelete = id;
+    openModal('modal-confirm-delete');
+}
+
+function confirmDelete() {
+    if (transactionToDelete === null) return;
+    const id = transactionToDelete;
+    
     const currentUser = JSON.parse(localStorage.getItem('smart_finance_currentUser'));
-    if (!currentUser) return;
+    if (!currentUser) {
+        closeModal('modal-confirm-delete');
+        return;
+    }
     const f = currentUser.finance;
 
     const txIndex = f.transactions.findIndex(t => t.id === id);
-    if (txIndex === -1) return;
+    if (txIndex === -1) {
+        closeModal('modal-confirm-delete');
+        return;
+    }
     const tx = f.transactions[txIndex];
 
     if (tx.type === 'income') f.balance -= tx.amount; else f.balance += tx.amount;
@@ -481,6 +528,9 @@ function deleteTransaction(id) {
     updateUsersArray(currentUser);
     localStorage.setItem('smart_finance_currentUser', JSON.stringify(currentUser));
     loadUserData(currentUser);
+    closeModal('modal-confirm-delete');
+    showToast('ลบรายการสำเร็จ');
+    transactionToDelete = null;
 }
 
 function renderTransactionList() {
