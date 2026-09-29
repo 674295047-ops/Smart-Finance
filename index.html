@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,30 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
 
     <div class="phone-frame">
+        <!-- Splash / Loading Screen -->
+        <!-- Splash Screen / หน้าโหลด -->
+        <div id="splash-screen" class="splash-screen">
+            <div class="splash-logo-box">
+                <img src="c:\Users\MSI\Pictures\Gemini_Generated_Image_vjtwbhvjtwbhvjtw.jpg" alt="Smart Finance Logo"
+                    class="splash-logo-img">
+            </div>
+            <h1 class="splash-title">Smart Finance</h1>
+            <p class="splash-subtitle">ระบบคำนวณสถิติและงบการเงิน</p>
+            <div class="splash-loader"></div>
+        </div>
+
         <div class="dynamic-island"></div>
 
         <!-- Screen 1: Auth -->
         <div id="screen-auth" class="screen active">
             <div class="auth-header">
                 <div class="logo-box">
-                    <i class="fa-solid fa-wallet"></i>
+                    <img src="c:\Users\MSI\Pictures\Gemini_Generated_Image_vjtwbhvjtwbhvjtw.jpg"
+                        alt="Smart Finance Logo" class="app-logo-img">
                 </div>
                 <h1 class="h1">Smart Finance</h1>
                 <p class="body3 mt-1">ระบบคำนวณสถิติและงบการเงินเชื่อมโยง 12 เดือน</p>
@@ -45,15 +60,17 @@
                         <label>รหัสผ่าน</label>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-key icon-left"></i>
-                            <input type="password" id="login-password" class="form-control" placeholder="อย่างน้อย 6 ตัวอักษร">
+                            <input type="password" id="login-password" class="form-control"
+                                placeholder="อย่างน้อย 6 ตัวอักษร">
                             <i class="fa-solid fa-eye icon-right" onclick="togglePassword('login-password', this)"></i>
                         </div>
-                        <div class="forgot-pwd">ลืมรหัสผ่าน?</div>
+                        <div class="forgot-pwd" onclick="openForgotPasswordModal()">ลืมรหัสผ่าน?</div>
                     </div>
                     <button type="button" class="btn btn-primary mt-2" onclick="handleLogin()">เข้าสู่ระบบ</button>
                 </div>
 
                 <!-- Register Form -->
+                <!-- เปลี่ยนตรงนี้จาก class="hidden" เป็น style="display: none;" -->
                 <div id="form-register" style="display: none;">
                     <div class="form-group">
                         <label>ชื่อผู้ใช้</label>
@@ -73,11 +90,41 @@
                         <label>ตั้งรหัสผ่าน</label>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-lock icon-left"></i>
-                            <input type="password" id="reg-password" class="form-control" placeholder="อย่างน้อย 6 ตัวอักษร">
+                            <input type="password" id="reg-password" class="form-control"
+                                placeholder="อย่างน้อย 6 ตัวอักษร">
                             <i class="fa-solid fa-eye icon-right" onclick="togglePassword('reg-password', this)"></i>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary mt-2" onclick="handleRegister()">สร้างบัญชีผู้ใช้</button>
+
+                    <!-- ยืนยันรหัสผ่าน -->
+                    <div class="form-group">
+                        <label>ยืนยันรหัสผ่าน</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-lock icon-left"></i>
+                            <input type="password" id="reg-confirm-password" class="form-control"
+                                placeholder="พิมพ์รหัสผ่านอีกครั้ง">
+                            <i class="fa-solid fa-eye icon-right"
+                                onclick="togglePassword('reg-confirm-password', this)"></i>
+                        </div>
+                    </div>
+
+                    <!-- ยอมรับข้อตกลง -->
+                    <div class="form-group"
+                        style="display: flex; align-items: center; gap: 8px; margin-top: 12px; margin-bottom: 16px;">
+                        <input type="checkbox" id="reg-terms" style="width: 16px; height: 16px; cursor: pointer;">
+                        <label for="reg-terms"
+                            style="margin-bottom: 0; font-size: 12px; color: var(--text-muted); cursor: pointer;">
+                            ฉันยอมรับ
+                            <a href="javascript:void(0)" onclick="openTermsModal('terms')"
+                                style="color: var(--btn-primary); text-decoration: underline;">ข้อตกลงการใช้งาน</a>
+                            และ
+                            <a href="javascript:void(0)" onclick="openTermsModal('privacy')"
+                                style="color: var(--btn-primary); text-decoration: underline;">นโยบายความเป็นส่วนตัว</a>
+                        </label>
+                    </div>
+
+                    <button type="button" class="btn btn-primary mt-2"
+                        onclick="handleRegister()">สร้างบัญชีผู้ใช้</button>
                 </div>
 
                 <div class="divider">หรือเข้าสู่ระบบด้วย</div>
@@ -85,10 +132,14 @@
                 <div class="social-btns">
                     <button class="btn btn-outline">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="18px" height="18px">
-                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                            <path fill="#EA4335"
+                                d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                            <path fill="#4285F4"
+                                d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                            <path fill="#FBBC05"
+                                d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                            <path fill="#34A853"
+                                d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
                         </svg> Google
                     </button>
                     <button class="btn btn-outline">
@@ -101,16 +152,17 @@
         <!-- Screen 2: Dashboard (Home) -->
         <div id="screen-home" class="screen">
             <div class="page-header">
-                <h2 class="h2">การเงิน</h2>
-                <button class="header-icon" onclick="openModal('modal-profile')"><i class="fa-solid fa-gear"></i></button>
+                <h2 class="h2">ภาพรวมการเงิน</h2>
+                <button class="header-icon" onclick="handleProfileClick()"><i class="fa-solid fa-gear"></i></button>
             </div>
 
             <div class="balance-section">
-                <div class="user-profile-badge" onclick="openModal('modal-profile')">
+                <div class="user-profile-badge" onclick="handleProfileClick()">
                     <div class="icon"><i class="fa-solid fa-user"></i></div>
-                    <span class="user-name-display">ชื่อผู้ใช้</span>
+                    <span class="user-name-display" data-id="profile-name">ชื่อผู้ใช้</span>
                 </div>
-                <div class="body3 mt-2" style="margin-left: 24px; color: var(--light)">2 กรกฎาคม 69</div>
+                <div class="body3 mt-2 current-date-display" style="margin-left: 24px; color: var(--light)">2 กรกฎาคม 69
+                </div>
             </div>
 
             <div class="content-container">
@@ -118,8 +170,8 @@
                     <span class="body3">ยอดเงินคงเหลือเดือนนี้</span>
                     <span class="date-badge">ก.ค. 69</span>
                 </div>
-                <div class="balance-amount">124,160.00 ฿</div>
-                
+                <div class="balance-amount" data-id="balance-amount">124,160.00 ฿</div>
+
                 <div class="today-expense">
                     <span class="body3 text-muted">วันนี้ใช้ไปแล้ว</span>
                     <span class="val">840.00 ฿</span>
@@ -166,16 +218,17 @@
         <!-- Screen 3: Transactions -->
         <div id="screen-transactions" class="screen">
             <div class="page-header">
-                <h2 class="h2">การเงิน</h2>
-                <button class="header-icon" onclick="openModal('modal-profile')"><i class="fa-solid fa-gear"></i></button>
+                <h2 class="h2">รายการธุรกรรม</h2>
+                <button class="header-icon" onclick="handleProfileClick()"><i class="fa-solid fa-gear"></i></button>
             </div>
 
             <div class="balance-section" style="padding-top: 0;">
-                <div class="user-profile-badge" onclick="openModal('modal-profile')">
+                <div class="user-profile-badge" onclick="handleProfileClick()">
                     <div class="icon"><i class="fa-solid fa-user"></i></div>
                     <span class="user-name-display">ชื่อผู้ใช้</span>
                 </div>
-                <div class="body3 mt-2" style="margin-left: 24px; color: var(--light)">2 กรกฎาคม 69</div>
+                <div class="body3 mt-2 current-date-display" style="margin-left: 24px; color: var(--light)">2 กรกฎาคม 69
+                </div>
             </div>
 
             <div class="content-container">
@@ -184,7 +237,7 @@
                         <i class="fa-solid fa-list"></i>
                         <h3 class="body2" style="font-weight: 700;">รายการในบัญชี</h3>
                     </div>
-                    <span class="date-badge" style="background: var(--light-green); color: var(--dark);">6 รายการ</span>
+                    <span class="date-badge">6 รายการ</span>
                 </div>
 
                 <div class="search-bar">
@@ -246,16 +299,17 @@
         <!-- Screen 4: Reports -->
         <div id="screen-reports" class="screen">
             <div class="page-header">
-                <h2 class="h2">การเงิน</h2>
-                <button class="header-icon" onclick="openModal('modal-profile')"><i class="fa-solid fa-gear"></i></button>
+                <h2 class="h2">รายงานและสถิติ</h2>
+                <button class="header-icon" onclick="handleProfileClick()"><i class="fa-solid fa-gear"></i></button>
             </div>
 
             <div class="balance-section" style="padding-top: 0;">
-                <div class="user-profile-badge" onclick="openModal('modal-profile')">
+                <div class="user-profile-badge" onclick="handleProfileClick()" data-id="profile-badge">
                     <div class="icon"><i class="fa-solid fa-user"></i></div>
                     <span class="user-name-display">ชื่อผู้ใช้</span>
                 </div>
-                <div class="body3 mt-2" style="margin-left: 24px; color: var(--light)">2 กรกฎาคม 69</div>
+                <div class="body3 mt-2 current-date-display" style="margin-left: 24px; color: var(--light)">2 กรกฎาคม 69
+                </div>
                 <div class="flex items-center gap-2 mt-2" style="color: var(--dark); font-weight: 700;">
                     <i class="fa-solid fa-chart-column"></i> สถิติรายงานใช้จ่าย
                 </div>
@@ -286,28 +340,34 @@
                 <div class="stat-cards">
                     <div class="stat-card">
                         <div class="body3 text-muted mb-1">รายรับรอบเดือน</div>
-                        <div class="body1" style="color: var(--success);">+25,000.00 ฿</div>
+                        <div class="body1 text-success">+25,000.00 ฿</div>
                     </div>
                     <div class="stat-card">
                         <div class="body3 text-muted mb-1">รายจ่ายรอบเดือน</div>
-                        <div class="body1" style="color: var(--danger);">-840.00 ฿</div>
+                        <div class="body1 text-danger">-840.00 ฿</div>
                     </div>
                 </div>
 
                 <div class="report-card donut-card">
                     <div class="flex justify-between items-center w-100 mb-2">
                         <span class="body2" style="font-weight: 700;">สัดส่วนการใช้จ่าย</span>
-                        <span class="date-badge" style="background: var(--success); color: white;">กรกฎาคม 2569</span>
+                        <span class="date-badge">กรกฎาคม 2569</span>
                     </div>
 
                     <div class="donut-container">
                         <div class="donut-chart"></div>
                         <div class="legend-grid">
-                            <div class="legend-item"><span class="flex items-center"><span class="legend-dot" style="background: #FF9800;"></span> อาหาร</span> <span>17.9%</span></div>
-                            <div class="legend-item"><span class="flex items-center"><span class="legend-dot" style="background: #00BCD4;"></span> ค่าน้ำ/ค่าไฟ</span> <span>66.1%</span></div>
-                            <div class="legend-item"><span class="flex items-center"><span class="legend-dot" style="background: #4CAF50;"></span> ค่าเดินทาง</span> <span>16.1%</span></div>
-                            <div class="legend-item"><span class="flex items-center"><span class="legend-dot" style="background: #8b92f7;"></span> ช้อปปิ้ง</span> <span>0.0%</span></div>
-                            <div class="legend-item"><span class="flex items-center"><span class="legend-dot" style="background: #ccc;"></span> อื่นๆ</span> <span>0.0%</span></div>
+                            <div class="legend-item"><span class="flex items-center"><span class="legend-dot"
+                                        style="background: #FF9800;"></span> อาหาร</span> <span>17.9%</span></div>
+                            <div class="legend-item"><span class="flex items-center"><span class="legend-dot"
+                                        style="background: #00BCD4;"></span> ค่าน้ำ/ค่าไฟ</span> <span>66.1%</span>
+                            </div>
+                            <div class="legend-item"><span class="flex items-center"><span class="legend-dot"
+                                        style="background: #4CAF50;"></span> ค่าเดินทาง</span> <span>16.1%</span></div>
+                            <div class="legend-item"><span class="flex items-center"><span class="legend-dot"
+                                        style="background: #8b92f7;"></span> ช้อปปิ้ง</span> <span>0.0%</span></div>
+                            <div class="legend-item"><span class="flex items-center"><span class="legend-dot"
+                                        style="background: #ccc;"></span> อื่นๆ</span> <span>0.0%</span></div>
                         </div>
                     </div>
                 </div>
@@ -317,25 +377,25 @@
         <!-- Screen 5: Budget -->
         <div id="screen-budget" class="screen">
             <div class="page-header">
-                <h2 class="h2">การเงิน</h2>
-                <button class="header-icon" onclick="openModal('modal-profile')"><i class="fa-solid fa-gear"></i></button>
+                <h2 class="h2">เป้าหมายงบประมาณ</h2>
+                <button class="header-icon" onclick="handleProfileClick()"><i class="fa-solid fa-gear"></i></button>
             </div>
 
             <div class="balance-section" style="padding-top: 0;">
-                <div class="user-profile-badge" onclick="openModal('modal-profile')">
+                <div class="user-profile-badge" onclick="handleProfileClick()">
                     <div class="icon"><i class="fa-solid fa-user"></i></div>
                     <span class="user-name-display">ชื่อผู้ใช้</span>
                 </div>
-                <div class="body3 mt-2" style="margin-left: 24px; color: var(--light)">2 กรกฎาคม 69</div>
+                <div class="body3 mt-2 current-date-display" style="margin-left: 24px;">2 กรกฎาคม 69</div>
             </div>
 
             <div class="content-container budget">
                 <div class="budget-header">
                     <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-bullseye" style="color: var(--dark)"></i>
+                        <i class="fa-solid fa-bullseye"></i>
                         <span class="body2" style="font-weight: 700;">แผนและเป้าหมายงบประมาณ</span>
                     </div>
-                    <span class="edit-badge" onclick="openModal('modal-budget')">แก้ไข</span>
+                    <span class="edit-badge" onclick="handleEditBudgetClick()">แก้ไข</span>
                 </div>
 
                 <div class="budget-summary">
@@ -343,7 +403,9 @@
                         <span class="body2">การใช้งานเฉลี่ยรวมเดือนนี้</span>
                         <span class="body1">4.2%</span>
                     </div>
-                    <div class="progress-bg mb-1"><div class="progress-fill" style="width: 4.2%;"></div></div>
+                    <div class="progress-bg mb-1">
+                        <div class="progress-fill" style="width: 4.2%;"></div>
+                    </div>
                     <div class="flex justify-between text-muted body3">
                         <span>จ่ายจริง: 840 ฿</span>
                         <span>เป้าหมายรวม: 20,000 ฿</span>
@@ -351,35 +413,42 @@
                 </div>
 
                 <div class="body2 mb-2" style="font-weight: 700;">งบแยกหมวด</div>
-                
+
                 <div class="budget-list">
                     <div class="budget-item">
                         <div class="budget-item-header">
                             <span class="flex items-center gap-2"><i class="fa-solid fa-burger"></i> อาหาร</span>
                             <span class="text-muted">150 / 5,000 ฿<br>3%</span>
                         </div>
-                        <div class="progress-bg"><div class="progress-fill" style="width: 3%;"></div></div>
+                        <div class="progress-bg">
+                            <div class="progress-fill" style="width: 3%;"></div>
+                        </div>
                     </div>
                     <div class="budget-item">
                         <div class="budget-item-header">
                             <span class="flex items-center gap-2"><i class="fa-solid fa-car"></i> ค่าเดินทาง</span>
                             <span class="text-muted">135 / 2,000 ฿<br>7%</span>
                         </div>
-                        <div class="progress-bg"><div class="progress-fill" style="width: 7%;"></div></div>
+                        <div class="progress-bg">
+                            <div class="progress-fill" style="width: 7%;"></div>
+                        </div>
                     </div>
                     <div class="budget-item">
                         <div class="budget-item-header">
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-faucet-drip"></i> ค่าน้ำ/ค่าไฟ</span>
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-faucet-drip"></i>
+                                ค่าน้ำ/ค่าไฟ</span>
                             <span class="text-muted">555 / 3,000 ฿<br>19%</span>
                         </div>
-                        <div class="progress-bg"><div class="progress-fill" style="width: 19%;"></div></div>
+                        <div class="progress-bg">
+                            <div class="progress-fill" style="width: 19%;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Bottom Navigation Menu -->
-        <div class="bottom-nav" id="bottom-nav" style="display: none;">
+        <div class="bottom-nav" id="bottom-nav" class="hidden">
             <button class="nav-item active" onclick="navigateTo('screen-home', this)">
                 <i class="fa-solid fa-house"></i>
                 <span>หน้าหลัก</span>
@@ -388,11 +457,11 @@
                 <i class="fa-regular fa-calendar-check"></i>
                 <span>รายการ</span>
             </button>
-            
-            <button class="nav-fab" onclick="openModal('modal-add')">
+
+            <button class="nav-fab" onclick="handleAddTxClick()">
                 <i class="fa-solid fa-plus"></i>
             </button>
-            
+
             <button class="nav-item" onclick="navigateTo('screen-reports', this)">
                 <i class="fa-solid fa-chart-simple"></i>
                 <span>รายงาน</span>
@@ -405,73 +474,357 @@
 
         <!-- Modals -->
 
-        <!-- Profile Settings Modal -->
+        <!-- Profile Settings Modal (Full Featured Settings Page) -->
+        <!-- Profile Settings Modal (Complete Production-Ready Version) -->
         <div class="modal-overlay" id="modal-profile">
+            <div class="modal-content settings-modal-content">
+                <div class="modal-drag-handle"></div>
+
+                <!-- Modal Header -->
+                <div class="settings-modal-header">
+                    <div class="settings-header-left">
+                        <div class="settings-hero-avatar" onclick="triggerAvatarUpload()">
+                            <i class="fa-solid fa-circle-user" id="settings-avatar-icon"></i>
+                            <span class="settings-avatar-edit-badge">
+                                <i class="fa-solid fa-camera"></i>
+                            </span>
+                            <input type="file" id="settings-avatar-input" accept="image/*" style="display: none;"
+                                onchange="handleAvatarChange(event)">
+                        </div>
+                        <div class="settings-header-info">
+                            <div class="settings-hero-name user-name-display">ชื่อผู้ใช้</div>
+                            <div class="settings-hero-email" id="settings-email-display">user@email.com</div>
+                            <span class="settings-hero-badge"><i class="fa-solid fa-shield-halved"></i>
+                                ยืนยันตัวตนแล้ว</span>
+                        </div>
+                    </div>
+                    <button class="modal-close" onclick="closeModal('modal-profile')"><i
+                            class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="modal-body settings-modal-body">
+
+                    <!-- SECTION 1: บัญชีผู้ใช้ -->
+                    <div class="settings-section">
+                        <div class="settings-section-label">
+                            <i class="fa-solid fa-id-card"></i> บัญชีผู้ใช้
+                        </div>
+                        <div class="settings-row-group">
+                            <div class="settings-form-row">
+                                <label for="settings-name">ชื่อแสดงผล</label>
+                                <div class="settings-input-wrap">
+                                    <i class="fa-solid fa-pen icon-left"></i>
+                                    <input type="text" id="settings-name" class="settings-field"
+                                        placeholder="ระบุชื่อแสดงผล">
+                                </div>
+                            </div>
+                            <div class="settings-form-row">
+                                <label>อีเมลผู้ใช้</label>
+                                <div class="settings-input-wrap">
+                                    <i class="fa-regular fa-envelope icon-left"></i>
+                                    <input type="email" id="settings-email-ro" class="settings-field" readonly
+                                        tabindex="-1">
+                                </div>
+                            </div>
+                            <button class="settings-save-btn" onclick="saveProfile()">
+                                <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลโปรไฟล์
+                            </button>
+                            <button class="settings-action-row" onclick="openChangePasswordModal()">
+                                <span><i class="fa-solid fa-key settings-row-icon"></i> เปลี่ยนรหัสผ่าน</span>
+                                <i class="fa-solid fa-chevron-right settings-row-arrow"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: การตั้งค่าการเงิน -->
+                    <div class="settings-section">
+                        <div class="settings-section-label">
+                            <i class="fa-solid fa-wallet"></i> การตั้งค่าการเงิน
+                        </div>
+                        <div class="settings-row-group">
+                            <div class="settings-form-row">
+                                <label for="settings-initial-balance">ยอดเงินเริ่มต้น (Initial Balance)</label>
+                                <div class="settings-input-wrap">
+                                    <i class="fa-solid fa-coins icon-left"></i>
+                                    <input type="number" id="settings-initial-balance" class="settings-field"
+                                        placeholder="0.00" step="0.01">
+                                    <span class="settings-unit" id="settings-currency-symbol">฿</span>
+                                </div>
+                                <p class="settings-hint"><i class="fa-solid fa-circle-info"></i>
+                                    ยอดนี้จะนำไปคำนวณร่วมกับรายรับ-รายจ่าย</p>
+                            </div>
+                            <div class="settings-form-row">
+                                <label for="settings-currency">สกุลเงินหลัก</label>
+                                <div class="settings-input-wrap">
+                                    <i class="fa-solid fa-globe icon-left"></i>
+                                    <select id="settings-currency" class="settings-field"
+                                        onchange="changeCurrency(this.value)">
+                                        <option value="THB">บาท (THB - ฿)</option>
+                                        <option value="USD">ดอลลาร์ (USD - $)</option>
+                                        <option value="JPY">เยน (JPY - ¥)</option>
+                                        <option value="EUR">ยูโร (EUR - €)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="settings-toggle-row">
+                                <div class="settings-toggle-info">
+                                    <i class="fa-solid fa-calculator settings-row-icon"></i>
+                                    <div>
+                                        <span class="settings-toggle-title">คำนวณยอดอัตโนมัติ</span>
+                                        <span class="settings-toggle-sub">คำนวณยอดเงินจากรายรับ-รายจ่าย</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="toggle-auto-calc" checked
+                                        onchange="saveToggleSetting('autoCalc', this.checked)">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                </label>
+                            </div>
+                            <button class="settings-action-row" onclick="openBudgetModalFromSettings()">
+                                <span><i class="fa-solid fa-bullseye settings-row-icon"></i>
+                                    ตั้งค่าเป้าหมายงบประมาณ</span>
+                                <i class="fa-solid fa-chevron-right settings-row-arrow"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: การแจ้งเตือน -->
+                    <div class="settings-section">
+                        <div class="settings-section-label">
+                            <i class="fa-solid fa-bell"></i> การแจ้งเตือน
+                        </div>
+                        <div class="settings-row-group">
+                            <div class="settings-toggle-row">
+                                <div class="settings-toggle-info">
+                                    <i class="fa-solid fa-chart-pie settings-row-icon"></i>
+                                    <div>
+                                        <span class="settings-toggle-title">สรุปรายจ่ายประจำวัน</span>
+                                        <span class="settings-toggle-sub">แจ้งเตือนสรุปค่าใช้จ่ายทุกวัน</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="toggle-daily-alert"
+                                        onchange="saveToggleSetting('dailyAlert', this.checked)">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                </label>
+                            </div>
+                            <div class="settings-toggle-row">
+                                <div class="settings-toggle-info">
+                                    <i class="fa-solid fa-triangle-exclamation settings-row-icon"></i>
+                                    <div>
+                                        <span class="settings-toggle-title">เตือนงบเกิน 80%</span>
+                                        <span class="settings-toggle-sub">แจ้งเตือนเมื่อใช้งบเกินกำหนด</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="toggle-budget-warn" checked
+                                        onchange="saveToggleSetting('budgetWarn', this.checked)">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: การแสดงผลและความปลอดภัย -->
+                    <div class="settings-section">
+                        <div class="settings-section-label">
+                            <i class="fa-solid fa-shield-halved"></i> การแสดงผลและความปลอดภัย
+                        </div>
+                        <div class="settings-row-group">
+                            <div class="settings-toggle-row">
+                                <div class="settings-toggle-info">
+                                    <i class="fa-solid fa-moon settings-row-icon"></i>
+                                    <div>
+                                        <span class="settings-toggle-title">Dark Mode</span>
+                                        <span class="settings-toggle-sub">เปลี่ยนธีมเป็นโหมดมืด</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="toggle-dark-mode"
+                                        onchange="toggleDarkMode(this.checked)">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                </label>
+                            </div>
+                            <div class="settings-toggle-row">
+                                <div class="settings-toggle-info">
+                                    <i class="fa-solid fa-eye-slash settings-row-icon"></i>
+                                    <div>
+                                        <span class="settings-toggle-title">ซ่อนยอดเงิน</span>
+                                        <span class="settings-toggle-sub">ซ่อนตัวเลขในหน้าหลัก</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="toggle-hide-balance"
+                                        onchange="toggleHideBalance(this.checked)">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                </label>
+                            </div>
+                            <div class="settings-toggle-row">
+                                <div class="settings-toggle-info">
+                                    <i class="fa-solid fa-lock settings-row-icon"></i>
+                                    <div>
+                                        <span class="settings-toggle-title">ล็อคแอปด้วย PIN</span>
+                                        <span class="settings-toggle-sub">เพิ่มความปลอดภัยด้วยรหัสผ่าน</span>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="toggle-app-lock"
+                                        onchange="handleAppLockToggle(this.checked)">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 5: การจัดการข้อมูล -->
+                    <div class="settings-section">
+                        <div class="settings-section-label">
+                            <i class="fa-solid fa-database"></i> การจัดการข้อมูล
+                        </div>
+                        <div class="settings-row-group">
+                            <button class="settings-action-row" onclick="exportTransactionsCSV()">
+                                <span><i class="fa-solid fa-file-csv settings-row-icon"></i> ส่งออกข้อมูลเป็น CSV</span>
+                                <i class="fa-solid fa-download settings-row-arrow"></i>
+                            </button>
+                            <button class="settings-action-row" onclick="importDataJSON()">
+                                <span><i class="fa-solid fa-file-import settings-row-icon"></i> นำเข้าข้อมูลสำรอง
+                                    (JSON)</span>
+                                <i class="fa-solid fa-upload settings-row-arrow"></i>
+                            </button>
+                            <button class="settings-action-row danger-row" onclick="confirmClearData()">
+                                <span><i class="fa-solid fa-trash settings-row-icon"></i>
+                                    ล้างรายการธุรกรรมทั้งหมด</span>
+                                <i class="fa-solid fa-chevron-right settings-row-arrow"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 6: เกี่ยวกับแอปและความช่วยเหลือ -->
+                    <div class="settings-section">
+                        <div class="settings-section-label">
+                            <i class="fa-solid fa-circle-info"></i> เกี่ยวกับแอปและความช่วยเหลือ
+                        </div>
+                        <div class="settings-row-group">
+                            <button class="settings-action-row" onclick="openTermsModal('privacy')">
+                                <span><i class="fa-solid fa-file-contract settings-row-icon"></i>
+                                    เงื่อนไขและนโยบายความเป็นส่วนตัว</span>
+                                <i class="fa-solid fa-chevron-right settings-row-arrow"></i>
+                            </button>
+                            <button class="settings-action-row" onclick="openFeedbackModal()">
+                                <span><i class="fa-solid fa-comment-dots settings-row-icon"></i> ส่งข้อเสนอแนะ /
+                                    แจ้งปัญหา</span>
+                                <i class="fa-solid fa-chevron-right settings-row-arrow"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 7: การจัดการเซสชัน -->
+                    <div class="settings-section">
+                        <div class="settings-section-label">
+                            <i class="fa-solid fa-user-gear"></i> การจัดการเซสชัน
+                        </div>
+                        <div class="settings-row-group">
+                            <button class="settings-action-row" onclick="handleSwitchAccount()">
+                                <span><i class="fa-solid fa-arrows-rotate settings-row-icon"></i> สลับบัญชีผู้ใช้</span>
+                                <i class="fa-solid fa-chevron-right settings-row-arrow"></i>
+                            </button>
+                            <button class="settings-action-row danger-row" onclick="handleLogout()">
+                                <span><i class="fa-solid fa-power-off settings-row-icon"></i> ออกจากระบบ</span>
+                                <i class="fa-solid fa-chevron-right settings-row-arrow"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-version-tag">Smart Finance v1.2 · Pro Edition</div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Password Sub-Modal -->
+        <div class="modal-overlay" id="modal-change-password">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="flex items-center gap-2">
-                        <div class="user-profile-badge" style="margin:0; background:white; color:var(--dark);">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-                        <div>
-                            <div class="body1">ตั้งค่าบัญชีระบบ</div>
-                            <div class="body3">จัดการโปรไฟล์และข้อมูลส่วนตัวของคุณ</div>
-                        </div>
-                    </div>
-                    <button class="modal-close" onclick="closeModal('modal-profile')"><i class="fa-solid fa-xmark"></i></button>
+                    <h2 class="h2">เปลี่ยนรหัสผ่าน</h2>
+                    <button class="modal-close" style="background:none;"
+                        onclick="closeModal('modal-change-password')"><i class="fa-solid fa-xmark"
+                            style="font-size:24px;"></i></button>
                 </div>
                 <div class="modal-body">
-                    <div class="flex items-center gap-2 mb-2">
-                        <i class="fa-solid fa-address-card"></i> ข้อมูลโปรไฟล์
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>ชื่อแสดงผล</label>
+                    <div class="settings-form-row">
+                        <label for="cp-current">รหัสผ่านปัจจุบัน</label>
                         <div class="input-wrapper">
-                            <i class="fa-solid fa-pen icon-left" style="color:var(--dark)"></i>
-                            <input type="text" id="settings-name" class="form-control" style="background: var(--light-green); border:none; font-weight:700;" value="ชื่อผู้ใช้">
+                            <i class="fa-solid fa-lock icon-left"></i>
+                            <input type="password" id="cp-current" class="form-control" placeholder="รหัสผ่านเดิม">
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label>เงินเก็บสะสมเริ่มต้น (บาท)</label>
+                    <div class="settings-form-row" style="margin-top:12px;">
+                        <label for="cp-new">รหัสผ่านใหม่</label>
                         <div class="input-wrapper">
-                            <i class="fa-solid fa-coins icon-left" style="color:var(--dark)"></i>
-                            <input type="number" class="form-control" style="background: var(--light-green); border:none; font-weight:700;" value="100000">
+                            <i class="fa-solid fa-key icon-left"></i>
+                            <input type="password" id="cp-new" class="form-control" placeholder="อย่างน้อย 6 ตัวอักษร">
                         </div>
                     </div>
-
-                    <button class="btn btn-primary mt-2 mb-3" onclick="saveProfile()">
-                        <i class="fa-solid fa-floppy-disk"></i> บันทึกการเปลี่ยนแปลง
-                    </button>
-
-                    <div class="flex gap-2">
-                        <button class="btn btn-outline" style="flex:1; border-color: #ddd; color: #444;" onclick="closeModal('modal-profile')">
-                            <i class="fa-solid fa-user-minus"></i> สลับบัญชี
-                        </button>
-                        <button class="btn btn-danger" style="flex:1;" onclick="handleLogout()">
-                            <i class="fa-solid fa-power-off"></i> ออกจากระบบ
-                        </button>
+                    <div class="settings-form-row" style="margin-top:12px;">
+                        <label for="cp-confirm">ยืนยันรหัสผ่านใหม่</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-check-double icon-left"></i>
+                            <input type="password" id="cp-confirm" class="form-control"
+                                placeholder="พิมพ์รหัสผ่านใหม่อีกครั้ง">
+                        </div>
+                    </div>
+                    <div class="flex gap-2 mt-3">
+                        <button class="btn btn-outline" style="flex:1;"
+                            onclick="closeModal('modal-change-password')">ยกเลิก</button>
+                        <button class="btn btn-primary" style="flex:1;"
+                            onclick="handleChangePassword()">บันทึกรหัสผ่าน</button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Clear Data Confirm Modal -->
+        <div class="modal-overlay" id="modal-clear-confirm">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align:center; padding-top:32px;">
+                    <div style="font-size:52px; color:var(--danger); margin-bottom:16px;">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <h2 class="h2 mb-2" style="color:var(--dark);">ล้างรายการทั้งหมด?</h2>
+                    <p class="body3 text-muted mb-3">รายการธุรกรรมทั้งหมดจะถูกลบอย่างถาวร
+                        การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+                    <div class="flex gap-2 mt-3">
+                        <button class="btn btn-outline" style="flex:1;"
+                            onclick="closeModal('modal-clear-confirm')">ยกเลิก</button>
+                        <button class="btn btn-danger"
+                            style="flex:1; background:var(--danger); color:white; border:none;"
+                            onclick="executeClearData()">ล้างข้อมูลทั้งหมด</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
         <!-- Add Transaction Modal -->
         <div class="modal-overlay" id="modal-add">
             <div class="modal-content" style="background: var(--surface);">
-                <div class="modal-header" style="color: var(--dark); padding-bottom: 10px;">
+                <div class="modal-header">
                     <h2 class="h2">บันทึกธุรกรรมใหม่</h2>
-                    <button class="modal-close" style="background:none;" onclick="closeModal('modal-add')"><i class="fa-solid fa-xmark" style="font-size:24px;"></i></button>
+                    <button class="modal-close" style="background:none;" onclick="closeModal('modal-add')"><i
+                            class="fa-solid fa-xmark" style="font-size:24px;"></i></button>
                 </div>
-                <div class="modal-body" style="border-radius: 0; padding-top: 0;">
-                    
+                <div class="modal-body">
+
                     <div class="tx-type-segment">
-                        <button class="tx-type-btn active expense" onclick="switchTxType('expense', this)">รายจ่าย</button>
+                        <button class="tx-type-btn active expense"
+                            onclick="switchTxType('expense', this)">รายจ่าย</button>
                         <button class="tx-type-btn" onclick="switchTxType('income', this)">รายรับ</button>
                     </div>
 
-                    <label class="body3" style="display:block; margin-bottom:8px; font-weight:700;">หมวดหมู่รายการ</label>
+                    <label class="body3"
+                        style="display:block; margin-bottom:8px; font-weight:700;">หมวดหมู่รายการ</label>
 
                     <div class="cat-grid" id="cat-grid-expense">
                         <div class="cat-item active"><i class="fa-solid fa-burger"></i> อาหาร</div>
@@ -489,11 +842,13 @@
                         <div class="cat-item"><i class="fa-solid fa-list-ul"></i> อื่นๆ</div>
                     </div>
 
-                    <label class="body3" style="display:block; margin-bottom:8px;">ชื่อรายการ (เช่น อาหารมื้อเที่ยง, ค่าตั๋วหนัง)</label>
+                    <label class="body3" style="display:block; margin-bottom:8px;">ชื่อรายการ (เช่น อาหารมื้อเที่ยง,
+                        ค่าตั๋วหนัง)</label>
                     <input type="text" class="input-flat" placeholder="พิมพ์ระบุชื่อรายการ...">
 
                     <label class="body3" style="display:block; margin-bottom:8px;">จำนวนเงิน (บาท ฿)</label>
-                    <input type="number" class="input-flat" style="font-size: 24px; font-weight: 700; padding: 12px 16px;" value="0.00">
+                    <input type="number" class="input-flat"
+                        style="font-size: 24px; font-weight: 700; padding: 12px 16px;" value="0.00">
 
                     <button class="btn btn-primary mt-2" onclick="saveNewTransaction()">ยืนยันบันทึกรายการ</button>
                 </div>
@@ -505,10 +860,11 @@
             <div class="modal-content" style="background: var(--surface);">
                 <div class="modal-header" style="color: var(--dark); padding-bottom: 10px;">
                     <h2 class="h2">ปรับงบเป้าหมายรายหมวด</h2>
-                    <button class="modal-close" style="background:none;" onclick="closeModal('modal-budget')"><i class="fa-solid fa-xmark" style="font-size:24px;"></i></button>
+                    <button class="modal-close" style="background:none;" onclick="closeModal('modal-budget')"><i
+                            class="fa-solid fa-xmark" style="font-size:24px;"></i></button>
                 </div>
                 <div class="modal-body" style="border-radius: 0; padding-top: 0;">
-                    
+
                     <div class="input-group-budget">
                         <label><i class="fa-solid fa-burger"></i> งบประมาณหมวด อาหาร (บาท)</label>
                         <input type="number" value="5000">
@@ -531,8 +887,10 @@
                     </div>
 
                     <div class="flex gap-2 mt-3">
-                        <button class="btn btn-danger" style="flex: 1;" onclick="closeModal('modal-budget')">ยกเลิก</button>
-                        <button class="btn btn-primary" style="flex: 1;" onclick="saveBudgetSettings()">บันทึกงบใหม่</button>
+                        <button class="btn btn-danger" style="flex: 1;"
+                            onclick="closeModal('modal-budget')">ยกเลิก</button>
+                        <button class="btn btn-primary" style="flex: 1;"
+                            onclick="saveBudgetSettings()">บันทึกงบใหม่</button>
                     </div>
                 </div>
             </div>
@@ -546,10 +904,14 @@
                         <i class="fa-solid fa-trash-can"></i>
                     </div>
                     <h2 class="h2 mb-2" style="color: var(--dark);">ยืนยันการลบรายการ</h2>
-                    <p class="body3 text-muted mb-3">คุณต้องการลบรายการนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+                    <p class="body3 text-muted mb-3">คุณต้องการลบรายการนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
+                    </p>
                     <div class="flex gap-2 mt-3">
-                        <button class="btn btn-outline" style="flex: 1;" onclick="closeModal('modal-confirm-delete')">ยกเลิก</button>
-                        <button class="btn btn-danger" style="flex: 1; background: var(--danger); color: white; border: none;" onclick="confirmDelete()">ยืนยันการลบ</button>
+                        <button class="btn btn-outline" style="flex: 1;"
+                            onclick="closeModal('modal-confirm-delete')">ยกเลิก</button>
+                        <button class="btn btn-danger"
+                            style="flex: 1; background: var(--danger); color: white; border: none;"
+                            onclick="confirmDelete()">ยืนยันการลบ</button>
                     </div>
                 </div>
             </div>
@@ -561,5 +923,181 @@
     </div>
 
     <script src="app.js"></script>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="modal-forgot-password">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="h2">รีเซ็ตรหัสผ่าน</h2>
+                <button class="modal-close" style="background:none;" onclick="closeModal('modal-forgot-password')">
+                    <i class="fa-solid fa-xmark" style="font-size:24px;"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- ขั้นตอนที่ 1: กรอกอีเมล -->
+                <div id="forgot-step-1">
+                    <p class="body3 text-muted mb-3">กรุณากรอกอีเมลที่ใช้สมัครสมาชิก ระบบจะส่งรหัสยืนยัน (OTP)
+                        เพื่อรีเซ็ตรหัสผ่าน</p>
+                    <div class="form-group">
+                        <label>อีเมลผู้ใช้งาน</label>
+                        <div class="input-wrapper">
+                            <i class="fa-regular fa-envelope icon-left"></i>
+                            <input type="email" id="forgot-email" class="form-control" placeholder="demo@gmail.com">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-2"
+                        onclick="handleSendResetOTP()">ส่งรหัสยืนยัน</button>
+                </div>
+
+                <!-- ขั้นตอนที่ 2: กรอก OTP และตั้งรหัสผ่านใหม่ -->
+                <div id="forgot-step-2" style="display: none;">
+                    <p class="body3 text-muted mb-2">รหัส OTP ทดสอบคือ: <b id="mock-otp-display"
+                            style="color:var(--btn-primary);">123456</b></p>
+                    <div class="form-group mb-2">
+                        <label>รหัส OTP (6 หลัก)</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-shield-halved icon-left"></i>
+                            <input type="text" id="forgot-otp" class="form-control" placeholder="123456" maxlength="6">
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label>ตั้งรหัสผ่านใหม่</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-key icon-left"></i>
+                            <input type="password" id="forgot-new-password" class="form-control"
+                                placeholder="อย่างน้อย 6 ตัวอักษร">
+                            <i class="fa-solid fa-eye icon-right"
+                                onclick="togglePassword('forgot-new-password', this)"></i>
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label>ยืนยันรหัสผ่านใหม่</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-check-double icon-left"></i>
+                            <input type="password" id="forgot-confirm-password" class="form-control"
+                                placeholder="พิมพ์รหัสผ่านใหม่อีกครั้ง">
+                            <i class="fa-solid fa-eye icon-right"
+                                onclick="togglePassword('forgot-confirm-password', this)"></i>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-2"
+                        onclick="handleResetPassword()">บันทึกรหัสผ่านใหม่</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: ข้อตกลงการใช้งาน และ นโยบายความเป็นส่วนตัว -->
+    <div class="modal-overlay" id="modal-terms">
+        <div class="modal-content" style="background: var(--surface);">
+            <div class="modal-header" style="color: var(--text-primary); border-bottom: 1px solid var(--border-color);">
+                <h2 class="h2" id="terms-modal-title">ข้อตกลงและนโยบาย</h2>
+                <button class="modal-close" style="background: var(--bg-input); color: var(--text-primary);"
+                    onclick="closeModal('modal-terms')">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <div class="auth-tabs" style="margin-bottom: 16px;">
+                    <button class="auth-tab active" id="tab-btn-terms"
+                        onclick="switchTermsTab('terms')">ข้อตกลงการใช้งาน</button>
+                    <button class="auth-tab" id="tab-btn-privacy"
+                        onclick="switchTermsTab('privacy')">นโยบายความเป็นส่วนตัว</button>
+                </div>
+
+                <!-- เนื้อหา ข้อตกลงการใช้งาน -->
+                <div id="content-terms"
+                    style="max-height: 250px; overflow-y: auto; text-align: left; padding-right: 8px;">
+                    <h3 class="body2 mb-1" style="font-weight: 700;">1. การใช้งานระบบ</h3>
+                    <p class="body3 text-muted mb-2">แอปพลิเคชันนี้จัดทำขึ้นเพื่อช่วยบันทึกการเงินส่วนบุคคล
+                        ผู้ใช้ต้องรับผิดชอบในการรักษาความลับของบัญชีและรหัสผ่านของตนเอง</p>
+
+                    <h3 class="body2 mb-1" style="font-weight: 700;">2. ข้อจำกัดความรับผิดชอบ</h3>
+                    <p class="body3 text-muted mb-2">
+                        ข้อมูลและการคำนวณทั้งหมดภายในแอปเป็นเพียงเครื่องมือช่วยจัดการการเงิน
+                        ไม่ถือเป็นคำแนะนำทางการเงินหรือการลงทุนอย่างเป็นทางการ</p>
+                </div>
+
+                <!-- เนื้อหา นโยบายความเป็นส่วนตัว -->
+                <div id="content-privacy"
+                    style="display: none; max-height: 250px; overflow-y: auto; text-align: left; padding-right: 8px;">
+                    <h3 class="body2 mb-1" style="font-weight: 700;">1. การจัดเก็บข้อมูล</h3>
+                    <p class="body3 text-muted mb-2">ข้อมูลธุรกรรมการเงินและรหัสผ่านของคุณจะถูกจัดเก็บไว้ในอุปกรณ์ของคุณ
+                        (Local Storage) อย่างปลอดภัย และไม่มีการส่งออกไปยังเซิร์ฟเวอร์ภายนอก</p>
+
+                    <h3 class="body2 mb-1" style="font-weight: 700;">2. ความปลอดภัยของข้อมูล</h3>
+                    <p class="body3 text-muted mb-2">ระบบไม่มีการขายหรือเปิดเผยข้อมูลส่วนบุคคลแก่บุคคลที่สาม
+                        และคุณสามารถล้างข้อมูลทั้งหมดได้ตลอดเวลาจากหน้าตั้งค่า</p>
+                </div>
+
+                <button class="btn btn-primary mt-3" onclick="closeModal('modal-terms')">เข้าใจแล้ว /
+                    ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 1: ตั้งค่ารหัส PIN 4 หลัก -->
+    <div class="modal-overlay" id="modal-pin-setup">
+        <div class="modal-content" style="background: var(--surface);">
+            <div class="modal-header" style="color: var(--dark); border-bottom: 1px solid var(--border-color);">
+                <h2 class="h2">ตั้งรหัส PIN (4 หลัก)</h2>
+                <button class="modal-close" style="background:none;" onclick="closePinModal()">
+                    <i class="fa-solid fa-xmark" style="font-size:24px;"></i>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align: center; padding-top: 20px;">
+                <p class="body3 text-muted mb-3">กรุณาตั้งรหัส PIN 4 หลักเพื่อความปลอดภัย</p>
+                <div class="form-group mb-3">
+                    <input type="password" id="pin-input-1" class="form-control pin-input-field" maxlength="4"
+                        placeholder="••••">
+                </div>
+                <p class="body3 text-muted mb-3">ยืนยันรหัส PIN อีกครั้ง</p>
+                <div class="form-group mb-3">
+                    <input type="password" id="pin-input-2" class="form-control pin-input-field" maxlength="4"
+                        placeholder="••••">
+                </div>
+                <button type="button" class="btn btn-primary mt-2" onclick="savePinCode()">บันทึกรหัส PIN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: หน้าจอปลดล็อค PIN เมื่อเข้าแอป -->
+    <div id="screen-pin-unlock" class="screen">
+        <div
+            style="width: 80px; height: 80px; background: var(--btn-primary); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+            <i class="fa-solid fa-lock" style="font-size: 36px; color: #fff;"></i>
+        </div>
+        <h2 class="h2 mb-1" style="color: var(--text-primary);">ใส่รหัส PIN เพื่อเข้าใช้งาน</h2>
+        <p class="body3 text-muted mb-3">กรุณากรอกรหัส PIN 4 หลักของคุณ</p>
+
+        <div style="width: 100%; max-width: 280px; margin-bottom: 20px;">
+            <input type="password" id="pin-unlock-input" class="form-control pin-input-field" maxlength="4"
+                placeholder="••••">
+        </div>
+
+        <button type="button" class="btn btn-primary" style="width: 100%; max-width: 280px;"
+            onclick="unlockWithPin()">ปลดล็อก</button>
+    </div>
+
+    <!-- Modal 3: แบบฟอร์มส่งข้อเสนอแนะ -->
+    <div class="modal-overlay" id="modal-feedback">
+        <div class="modal-content" style="background: var(--surface);">
+            <div class="modal-header" style="color: var(--text-primary); border-bottom: 1px solid var(--border-color);">
+                <h2 class="h2">ส่งข้อเสนอแนะ / แจ้งปัญหา</h2>
+                <button class="modal-close" style="background: var(--bg-input); color: var(--text-primary);"
+                    onclick="closeModal('modal-feedback')">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 24px;">
+                <p class="body3 text-muted mb-2">ช่วยเราปรับปรุงแอปให้ดีขึ้นโดยส่งความคิดเห็นหรือแจ้งปัญหาที่พบ</p>
+                <textarea id="feedback-text" class="input-flat" rows="4"
+                    placeholder="พิมพ์ข้อความข้อเสนอแนะหรือปัญหาที่นี่..." style="resize: none;"></textarea>
+                <button class="btn btn-primary" onclick="submitFeedback()">ส่งข้อเสนอแนะ</button>
+            </div>
+        </div>
+    </div>
+
 </body>
+
 </html>
